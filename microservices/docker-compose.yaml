@@ -1,0 +1,111 @@
+version: "3.7"
+
+services:
+  frontend:
+    build: ./instagram
+    container_name: client
+    ports:
+      - '3000:3000'
+    stdin_open: true
+    tty: true
+    networks:
+      - react-spring
+    depends_on:
+      - auth
+      - notification
+      - post
+      - user
+
+  auth:
+    build: ./authentication
+    hostname: auth
+    container_name: auth
+    restart: always
+    ports:
+      - '8081:8080'
+    networks:
+      # - spring-redis
+      - react-spring
+      - spring-mongo
+    depends_on:
+      - mongodb
+    #   - redis
+
+  notification:
+    build: ./notification
+    hostname: notification
+    container_name: notification
+    restart: always
+    ports:
+      - '8083:8080'
+    networks:
+      # - spring-redis
+      - react-spring
+      - spring-mongo
+    depends_on:
+      - mongodb
+    #   - redis
+
+  post:
+    build: ./post
+    hostname: post
+    container_name: post
+    restart: always
+    ports:
+      - '8080:8080'
+    networks:
+      # - spring-redis
+      - react-spring
+      - spring-mongo
+    depends_on:
+      - mongodb
+    #   - redis
+
+  user:
+    build: ./user
+    hostname: user
+    container_name: user
+    restart: always
+    ports:
+      - '8082:8080'
+    networks:
+      # - spring-redis
+      - react-spring
+      - spring-mongo
+    depends_on:
+      - mongodb
+    #   - redis
+
+  # redis:
+  #   container_name: redis
+  #   hostname: redis
+  #   restart: always
+  #   image: redis:alpine3.17
+  #   networks:
+  #     - spring-redis
+  #   volumes:
+  #     - redis_data:/data
+  #   expose:
+  #     - 6379
+
+  mongodb:
+    build: ./db
+    hostname: mongodb
+    container_name: mongodb
+    restart: always
+    environment:
+        MONGO_INITDB_ROOT_USERNAME: admin
+        MONGO_INITDB_ROOT_PASSWORD: ece750
+    networks:
+      - spring-mongo
+    ports:
+      - 27017:27017
+
+networks:
+  react-spring:
+  spring-mongo:
+  # spring-redis:
+
+# volumes:
+  # mongodb_data:
+#   redis_data:

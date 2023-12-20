@@ -1,0 +1,44 @@
+###### Main Service ######
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ins-front-end
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: ins-front-end
+  template:
+    metadata:
+      labels:
+        name: ins-front-end
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9080"
+    spec:
+      containers:
+      - name: ins-front-end
+        image: image-registry.openshift-image-registry.svc:5000/acmeair-g13/ins-frontend:latest
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        ports:
+        - containerPort: 3000
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ins-front-end
+spec:
+  ports:
+    - name: 3000-tcp
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+  selector:
+    name: ins-front-end

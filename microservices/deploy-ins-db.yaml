@@ -1,0 +1,66 @@
+##### INS Database  #####
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    service: ins-db
+  name: ins-db
+spec:
+  ports:
+  - name: "27017"
+    port: 27017
+    protocol: TCP
+    targetPort: 27017
+  selector:
+    name: ins-db
+status:
+  loadBalancer: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  name: ins-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: ins-db
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        name: ins-db
+    spec:
+      volumes:
+        - name: ins-db-1
+          emptyDir: {}
+        - name: ins-db-2
+          emptyDir: {}
+      containers:
+      - image: image-registry.openshift-image-registry.svc:5000/acmeair-g13/ins-mongo:latest
+        name: ins-db
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          value: admin
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          value: ece750
+        ports:
+        - containerPort: 27017
+          protocol: TCP
+        # resources:
+        #   requests:
+        #     cpu: 500m
+        #     memory: 512Mi
+        #   limits:
+        #     cpu: 500m
+        #     memory: 4Gi
+        volumeMounts:
+          - name: ins-db-1
+            mountPath: /data/configdb
+          - name: ins-db-2
+            mountPath: /data/db
+      restartPolicy: Always
+status: {}

@@ -1,0 +1,44 @@
+###### Main Service ######
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-post
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: backend-post
+  template:
+    metadata:
+      labels:
+        name: backend-post
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9080"
+    spec:
+      containers:
+      - name: backend-post
+        image: image-registry.openshift-image-registry.svc:5000/acmeair-g13/backend-post:latest
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        ports:
+        - containerPort: 8080
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-post
+spec:
+  ports:
+    - name: 8080-tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  selector:
+    name: backend-post
