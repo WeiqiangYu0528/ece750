@@ -6,8 +6,8 @@ from analyzer import Analyzer
 
 # IBM Cloud API Credentials
 URL = "https://ca-tor.monitoring.cloud.ibm.com"
-APIKEY = "xiEparnIvPMBshEpuZ3pfmFrhpJyRlRNNmC1n_SjB_QG"
-GUID = "b92c514a-ca21-4548-b3f0-4d6391bab407"
+APIKEY = ""
+GUID = ""
 
 # metrices: time aggregation is average
 avg_metric_ids = ["cpu.quota.used.percent",
