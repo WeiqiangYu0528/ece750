@@ -15,4 +15,8 @@ Notably, there are three main adaptive features:
 2. Increase/decrease image quality (resolution)
 3. Increase/decrease image loading number
 
+**WATINS Front-end** https://github.com/WeiqiangYu0528/instagram-frontend
+
+**WATINS Back-end** https://github.com/WeiqiangYu0528/instagram-backend
+
 Explore the project report in the repository for more details. Have fun exploring!
